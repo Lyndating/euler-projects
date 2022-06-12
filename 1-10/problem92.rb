@@ -9,57 +9,85 @@
 
 # How many starting numbers below ten million will arrive at 89?
 
-
+# 44s 
+# for each digit in num doing the square calculation
 $sumOptions = {}
 (0..9).each do |num|
-    $sumOptions[num] = num * num
+    $sumOptions[num.to_s] = num * num
 end 
 
-# def updateNum (num)
-#     sum = 0
-#     num.to_s.split("").each do |char|
-#         sum += $sumOptions[char]
-#     end
-#     sum
-# end
 def updateNum (num)
     sum = 0
-    while num > 0
-        firstDigit = num % 10
-        num = num / 10
-        sum += $sumOptions[firstDigit]
+    num.to_s.split("").each do |char|
+        sum += $sumOptions[char]
     end
     sum
 end
 
-count = 0 
-cache = Set.new
-failedCache = Set.new
-(1..10000000).each do |num|
-    addCache = num < 1000
+count = 0
+(1..10000).each do |num|
     update = updateNum(num)
-    chain = [num, update]
-    while update 
-        if update == 1 || failedCache.include?(update)
-            if addCache
-                chain.each do |item|
-                    failedCache << item
-                end
-            end
+    while update
+        if update ==1
             break
-        elsif update == 89 || cache.include?(update) 
-            if addCache
-                chain.each do |item|
-                cache << item
-                end
-            end
+        elsif update == 89
             count += 1
             break
         else
             update = updateNum(update)
-            chain.push(update)
         end
     end
 end
 
-puts count
+puts count  
+
+
+
+
+# 10s
+# $sumOptions = {}
+# (0..9).each do |num|
+#     $sumOptions[num] = num * num
+# end 
+
+# def updateNum (num)
+#     sum = 0
+#     while num > 0
+#         firstDigit = num % 10
+#         num = num / 10
+#         sum += $sumOptions[firstDigit]
+#     end
+#     sum
+# end
+
+# count = 0 
+# cache = Set.new
+# failedCache = Set.new
+# (1..10000000).each do |num|
+#     addCache = num < 1000
+#     update = updateNum(num)
+#     chain = [num, update]
+#     while update 
+#         if update == 1 || failedCache.include?(update)
+#             if addCache
+#                 chain.each do |item|
+#                     failedCache << item
+#                 end
+#             end
+#             break
+#         elsif update == 89 || cache.include?(update) 
+#             if addCache
+#                 chain.each do |item|
+#                 cache << item
+#                 end
+#             end
+#             count += 1
+#             break
+#         else
+#             update = updateNum(update)
+#             chain.push(update)
+#         end
+#     end
+# end
+
+# puts count
